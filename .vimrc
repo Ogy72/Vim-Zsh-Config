@@ -17,7 +17,6 @@ Plugin 'tpope/vim-surround'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'mattn/emmet-vim'
 Plugin 'Townk/vim-autoclose'
-Plugin 'ycm-core/YouCompleteMe'
 Plugin 'ap/vim-buftabline'
 
 " ==== PLUGIN THEMES ====
@@ -26,6 +25,7 @@ Plugin 'ayu-theme/ayu-vim'
 Plugin 'mhartington/oceanic-next'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'joshdick/onedark.vim'
+Plugin 'dracula/vim',{'name':'dracula'}
 " Plugin 'ryanoasis/vim-devicons'
 " ==== END PLUGIN THEMES ====
 
@@ -45,7 +45,8 @@ let g:indentLine_setColors = 0
 "let ayucolor="dark"
 "colorscheme ayu
 "colorscheme OceanicNext
-colorscheme onedark
+"colorscheme onedark
+colorscheme dracula
 let g:airline_theme='onedark'
 set guifont=Monospace\ 10
 set fillchars+=vert:\$
@@ -75,8 +76,9 @@ endif
 " let NERDTreeIgnore = ['\.pyc$', '\.o$', '\.so$', '\.a$', '\.swp', '*\.swp', '\.swo', '\.swn', '\.swh', '\.swm', '\.swl', '\.swk', '\.sw*$', '[a-zA-Z]*egg[a-zA-Z]*', '[a-zA-Z]*cache[a-zA-Z]*']
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+let NERDTreeQuitOnOpen = 1
 let NERDTreeShowHidden=1
-let NERDTreeWinSize=21
+let NERDTreeWinSize=27
 let g:NERDTreeWinPos="right"
 " let g:NERDTreeDirArrows=0
 let g:NERDTreeDirArrowExpandable = '▸'
@@ -189,9 +191,14 @@ let g:NERDTreeGitStatusUntrackedFilesMode = 'all'
 let g:NERDTreeGitStatusShowClean = 1
 " +++++++++++++++++++++++++++++++++++
 
-" +++++ SETUP ONE DARK ++++"
+" +++++ SETUP ONE DARK +++++
 let g:onedark_hide_endofbuffer=1
 let g:onedark_terminal_italics=1
 let g:ondedark_termcolors=256
+" +++++++++++++++++++++++++++++
+
+" +++++ EMMET SETUP +++++
+let g:user_emmet_leader_key='<C-e>'
+" +++++++++++++++++++++++
 
 hi Normal guibg=NONE ctermbg=NONE
