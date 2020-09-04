@@ -1,11 +1,14 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
+set nocompatible            " be iMproved, required
+filetype on                 " filetype must be 'on' before setting it 'off'
+                            "   otherwise it exits with a bad status and breaks
+                            "   git commit.
+filetype off                " force reloading *after* pathogen loaded
 set exrc
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-" ==== START ALL PLUGINS ====
+" Plugin
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
@@ -16,10 +19,16 @@ Plugin 'terryma/vim-multiple-cursors'
 Plugin 'tpope/vim-surround'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'mattn/emmet-vim'
-Plugin 'Townk/vim-autoclose'
 Plugin 'ap/vim-buftabline'
+Plugin 'ycm-core/YouCompleteMe'
+Plugin 'Raimondi/delimitMate'
+Plugin 'othree/html5.vim'
 
-" ==== PLUGIN THEMES ====
+" css
+Plugin 'ap/vim-css-color'
+Plugin 'hail2u/vim-css3-syntax'
+
+" Theme
 Plugin 'morhetz/gruvbox'
 Plugin 'ayu-theme/ayu-vim'
 Plugin 'mhartington/oceanic-next'
@@ -27,13 +36,13 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'joshdick/onedark.vim'
 Plugin 'dracula/vim',{'name':'dracula'}
 " Plugin 'ryanoasis/vim-devicons'
-" ==== END PLUGIN THEMES ====
 
-" ==== END ALL PLUGINS ====
+" End All Plugin
 call vundle#end()
 
+syntax on
+filetype plugin indent on   " enable detection, plugins and indent
 
-" ==== BASIC ====
 " IndentLine {{
 let g:indentLine_char = ''
 let g:indentLine_first_char = ''
@@ -41,7 +50,9 @@ let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_setColors = 0
 " }}
 
-" === SET THEME ==
+
+" Set UI
+" ------------------
 "let ayucolor="dark"
 "colorscheme ayu
 "colorscheme OceanicNext
@@ -49,20 +60,21 @@ let g:indentLine_setColors = 0
 colorscheme dracula
 let g:airline_theme='onedark'
 set guifont=Monospace\ 10
-set fillchars+=vert:\$
-syntax enable
-syntax on
-set t_Co=256
-set ruler
-set hidden
-set number
-set relativenumber
+set encoding=utf-8 nobomb
+set cursorline
 set laststatus=2
-set smartindent
-set st=4 sw=4 et
-set shiftwidth=4
-set tabstop=4
-set encoding=UTF-8
+set number
+set numberwidth=4
+set showmode                " Show the current mode.
+set showcmd                 " show partial command on last line of screen.
+set showmatch               " show matching parenthesis
+set splitbelow splitright   " how to split new windows.
+set title                   " Show the filename in the window title bar.
+
+set scrolloff=5             " Start scrolling n lines before horizontal
+                            "   border of window.
+set sidescrolloff=7         " Start scrolling n chars before end of screen.
+set sidescroll=1
 
 if $COLORTERM == 'xfce4-terminal'
 	set t_co=256
@@ -71,6 +83,53 @@ endif
 if (has("termguicolors"))
   set termguicolors
 endif
+
+" -----------------
+
+
+set t_Co=256
+set ruler
+set hidden
+set relativenumber
+set undofile
+set ttyfast
+set ttimeoutlen=0
+set hlsearch
+set filetype=html
+set filetype=php
+
+" --- command completion ---
+set wildmenu                " Hitting TAB in command mode will
+set wildchar=<TAB>          "   show possible completions.
+set wildmode=list:longest
+set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/node_modules/*
+set wildignore+=*.DS_STORE,*.db,node_modules/**,*.jpg,*.png,*.gif
+set wildignore+=*/coverage
+
+" -----------------------------------------------------------------------------
+" INDENTATION AND TEXT-WRAP
+" -----------------------------------------------------------------------------
+
+set expandtab                   " Expand tabs to spaces
+set autoindent smartindent      " auto/smart indent
+set copyindent                  " copy previous indentation on auto indent
+set softtabstop=4               " Tab key results in # spaces
+set tabstop=4                   " Tab is # spaces
+set shiftwidth=4                " The # of spaces for indenting.
+set smarttab                    " At start of line, <Tab> inserts shift width
+                                "   spaces, <Bs> deletes shift width spaces.
+
+set wrap                        " wrap lines
+set textwidth=120
+set formatoptions=qrn1          " automatic formating.
+set formatoptions-=o            " don't start new lines w/ comment leader on
+                                "   pressing 'o'
+
+set nomodeline                  " don't use modeline (security)
+
+set pastetoggle=<leader>p       " paste mode: avoid auto indent, treat chars
+                                "   as literal.
+
 
 " ==== NERDTREE ====
 " let NERDTreeIgnore = ['\.pyc$', '\.o$', '\.so$', '\.a$', '\.swp', '*\.swp', '\.swo', '\.swn', '\.swh', '\.swm', '\.swl', '\.swk', '\.sw*$', '[a-zA-Z]*egg[a-zA-Z]*', '[a-zA-Z]*cache[a-zA-Z]*']
@@ -85,6 +144,7 @@ let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 let mapleader = " "
 map <C-\> :NERDTreeToggle<CR>
+map <C-f> :NERDTreeRefreshRoot<CR>
 " ====================
 
 " +++++ MAPING NERDTREE +++++
@@ -116,6 +176,7 @@ set laststatus=2
 set noshowmode
 if !has('gui_running')
   set t_Co=256
+let g:AutoClosePreservDotReg = 0
 endif
 let g:lightline = {
       \ 'component_function': {
@@ -198,7 +259,13 @@ let g:ondedark_termcolors=256
 " +++++++++++++++++++++++++++++
 
 " +++++ EMMET SETUP +++++
-let g:user_emmet_leader_key='<C-e>'
+let g:user_emmet_leader_key='<C-a>'
 " +++++++++++++++++++++++
+
+"Disable arrow key normal mode
+map <up> <nop>
+map <down> <nop>
+map <left> <nop>
+map <right> <nop>
 
 hi Normal guibg=NONE ctermbg=NONE
